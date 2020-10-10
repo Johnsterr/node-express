@@ -1,2 +1,2 @@
-# node-express
-Practice for work with Node &amp; ExpressJS
+# Practice for work with Node & ExpressJS
+
