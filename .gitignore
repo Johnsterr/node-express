@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# local js files
+access.js
+
 # local env files
 .env
 .env.local
