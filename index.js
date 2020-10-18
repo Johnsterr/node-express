@@ -8,7 +8,6 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
-const access = require('./access');
 const homeRoutes = require('./routes/home');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
@@ -17,7 +16,8 @@ const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
-const url = access;
+const keys = require('./keys');
+const access = require('./access');
 
 const app = express();
 
@@ -29,7 +29,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
 	collection: 'sessions',
-	uri: url
+	uri: access.MONGODB_URI
 })
 
 app.engine('hbs', hbs.engine);
@@ -38,7 +38,7 @@ app.set('views', 'views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true}));
 app.use(session({
-	secret: 'some secret value',
+	secret: keys.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false,
 	store: store
@@ -58,7 +58,7 @@ const PORT = process.env.PORT || 3000;
 
 async function start() {
 	try {
-		await mongoose.connect(url, {
+		await mongoose.connect(access.MONGODB_URI, {
 			useNewUrlParser: true,
 			useFindAndModify: false
 		});
