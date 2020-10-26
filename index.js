@@ -3,6 +3,8 @@ const path = require('path');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const compression = require('compression');
 const Handlebars = require('handlebars');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
@@ -20,7 +22,6 @@ const userMiddleware = require('./middleware/user');
 const errorHandler = require('./middleware/error');
 const fileMiddleware = require('./middleware/file');
 const keys = require('./keys');
-const access = require('./access');
 
 const app = express();
 
@@ -33,7 +34,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
 	collection: 'sessions',
-	uri: access.MONGODB_URI
+	uri: keys.MONGODB_URI
 })
 
 app.engine('hbs', hbs.engine);
@@ -51,6 +52,10 @@ app.use(session({
 app.use(fileMiddleware.single('avatar'));
 app.use(csrf());
 app.use(flash());
+app.use(helmet({
+	contentSecurityPolicy: false
+}));
+app.use(compression());
 app.use(varMiddleware);
 app.use(userMiddleware);
 app.use('/', homeRoutes);
@@ -67,7 +72,7 @@ const PORT = process.env.PORT || 3000;
 
 async function start() {
 	try {
-		await mongoose.connect(access.MONGODB_URI, {
+		await mongoose.connect(keys.MONGODB_URI, {
 			useNewUrlParser: true,
 			useFindAndModify: false
 		});

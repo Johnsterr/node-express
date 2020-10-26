@@ -1,4 +1,5 @@
-module.exports = {
-	BASE_URL: 'http://localhost:3000',
-	SESSION_SECRET: 'some secret value'
-};
+if (process.env.NODE_ENV === 'production') {
+	module.exports = require('../access.prod');
+} else {
+	module.exports = require('../access.dev');
+}

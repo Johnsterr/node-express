@@ -1,10 +1,9 @@
-const access = require('../access');
 const keys = require('../keys');
 
 module.exports = function(email, token) {
 	return {
 		to: email,
-		from: access.MAIL,
+		from: keys.MAIL,
 		subject: 'Восстановление пароля',
 		html: `
 			<h1>Вы забыли пароль?</h1>

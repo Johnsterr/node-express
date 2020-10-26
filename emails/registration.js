@@ -1,10 +1,9 @@
-const access = require('../access');
 const keys = require('../keys');
 
 module.exports = function(email) {
 	return {
 		to: email,
-		from: access.MAIL,
+		from: keys.MAIL,
 		subject: 'Аккаунт создан',
 		html: `
 			<h1>Добро пожаловать в наш магазин</h1>

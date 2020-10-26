@@ -3,7 +3,7 @@ node_modules
 /dist
 
 # local js files
-access.js
+access.dev.js
 
 # local env files
 .env
